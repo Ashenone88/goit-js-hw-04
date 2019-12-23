@@ -1,31 +1,28 @@
 "use strict";
+console.log("ЗАДАНИЕ 2");
+
 const inventory = {
   items: ["Knife", "Gas mask"],
   add(itemName) {
-    console.log(`Adding ${itemName} to inventory`);
-
     this.items.push(itemName);
   },
   remove(itemName) {
-    console.log(`Removing ${itemName} from inventory`);
-
     this.items = this.items.filter(item => item !== itemName);
   }
 };
 
-const invokeInventoryAction = function(itemName, action) {
-  console.log(`Invoking action on ${itemName}`);
-  action.call(this, itemName);
+const invokeInventoryOperation = function(object, inventoryAction, itemName) {
+  console.log(`Invoking ${inventoryAction.name} opeartion on ${itemName}`);
+  const action = inventoryAction.bind(object, itemName);
+  action();
 };
 
-invokeInventoryAction.bind(inventory, "Medkit", inventory.add)();
-// Invoking action on Medkit
-// Adding Medkit to inventory
+invokeInventoryOperation(inventory, inventory.add, "Medkit");
+// Invoking add opeartion on Medkit
 
 console.log(inventory.items); // ['Knife', 'Gas mask', 'Medkit']
 
-invokeInventoryAction.call(inventory, "Gas mask", inventory.remove);
-// Invoking action on Gas mask
+invokeInventoryOperation(inventory, inventory.remove, "Gas mask");
 // Removing Gas mask from inventory
 
 console.log(inventory.items); // ['Knife', 'Medkit']
